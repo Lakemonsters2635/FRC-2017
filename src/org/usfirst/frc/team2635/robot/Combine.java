@@ -1,13 +1,13 @@
 package org.usfirst.frc.team2635.robot;
 
-import edu.wpi.first.wpilibj.CANTalon;
+import edu.wpi.first.wpilibj.Talon;
 
 public class Combine
 {
 	
-	public CANTalon combineMotor;
+	public Talon combineMotor;
 	
-	public Combine(CANTalon motor) {
+	public Combine(Talon motor) {
 		this.combineMotor = motor;
 	}
 	
