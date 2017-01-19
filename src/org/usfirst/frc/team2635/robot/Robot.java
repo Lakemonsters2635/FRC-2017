@@ -24,6 +24,15 @@ public class Robot extends IterativeRobot {
 
     Command autonomousCommand;
     SendableChooser chooser;
+    
+    //Physical Object Declaration
+    
+    
+    
+    //Method Object Declaration
+    Shooter shooter;
+    
+    
 
     /**
      * This function is run when the robot is first started up and should be
@@ -35,6 +44,15 @@ public class Robot extends IterativeRobot {
         chooser.addDefault("Default Auto", new ExampleCommand());
 //        chooser.addObject("My Auto", new MyAutoCommand());
         SmartDashboard.putData("Auto mode", chooser);
+        
+        //Physical Object Initialization
+        
+        
+        
+        //Method Object Initialization
+        shooter = new Shooter();
+        
+           
     }
 	
 	/**
