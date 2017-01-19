@@ -1,6 +1,7 @@
 package org.usfirst.frc.team2635.robot;
 
-import edu.wpi.first.wpilibj.Talon;
+
+import com.ctre.CANTalon;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
 
@@ -11,7 +12,7 @@ public class Drive
 	public Joystick leftJoystick;
 	public Joystick rightJoystick;
 	
-	public void setMotors(Talon frontLeft, Talon backLeft, Talon frontRight, Talon backRight) {
+	public void setMotors(CANTalon frontLeft, CANTalon backLeft, CANTalon frontRight, CANTalon backRight) {
 		drive = new RobotDrive(frontLeft, backLeft, frontRight, backRight);
 	}
 	
