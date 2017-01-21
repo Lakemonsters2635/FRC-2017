@@ -1,4 +1,4 @@
-package vision;
+package org.usfirst.frc.team2635.robot;
 
 import java.io.File;
 import java.io.FileWriter;
