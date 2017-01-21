@@ -6,16 +6,16 @@ public class ShooterVision {
 		
 	}
 	
-	public double createBox(double a){
-		return a;
+	public void createBox(){
+		
 	}
 	
-	public double getDistance(double a){
-		return a;
+	public double getDistance(){
+		return 1;
 	}
 	
-	public double getAngle(double a){
-		return a;
+	public double getAngle(){
+		return 1;
 	}
 	
 }
