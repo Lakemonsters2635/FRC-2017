@@ -26,7 +26,7 @@ public class Robot extends IterativeRobot {
     Command autonomousCommand;
     SendableChooser chooser;
 
-    int foobar;
+    
 
     
     //Physical Object Declaration
