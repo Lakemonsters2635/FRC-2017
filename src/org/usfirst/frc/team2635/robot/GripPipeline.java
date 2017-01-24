@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.HashMap;
 
+import edu.wpi.first.wpilibj.vision.VisionPipeline;
+
 import org.opencv.core.*;
 import org.opencv.core.Core.*;
 import org.opencv.features2d.FeatureDetector;
@@ -23,7 +25,7 @@ import org.opencv.objdetect.*;
 *
 * @author GRIP
 */
-public class GripPipeline {
+public class GripPipeline implements VisionPipeline {
 
 	//Outputs
 	private Mat hsvThresholdOutput = new Mat();
@@ -37,12 +39,12 @@ public class GripPipeline {
 	/**
 	 * This is the primary method that runs the entire pipeline and updates the outputs.
 	 */
-	public void process(Mat source0) {
+	@Override	public void process(Mat source0) {
 		// Step HSV_Threshold0:
 		Mat hsvThresholdInput = source0;
-		double[] hsvThresholdHue = {87.41007194244602, 95.52901023890787};
-		double[] hsvThresholdSaturation = {6.879496402877698, 83.11433447098977};
-		double[] hsvThresholdValue = {238.4892086330935, 255.0};
+		double[] hsvThresholdHue = {66.36690647482014, 180.0};
+		double[] hsvThresholdSaturation = {0.0, 70.05972696245733};
+		double[] hsvThresholdValue = {222.43705035971223, 255.0};
 		hsvThreshold(hsvThresholdInput, hsvThresholdHue, hsvThresholdSaturation, hsvThresholdValue, hsvThresholdOutput);
 
 		// Step CV_erode0:
