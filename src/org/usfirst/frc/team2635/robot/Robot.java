@@ -1,5 +1,6 @@
 
 package org.usfirst.frc.team2635.robot;
+import com.ctre.CANTalon;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -24,7 +25,7 @@ public class Robot extends IterativeRobot {
 
     Command autonomousCommand;
     SendableChooser chooser;
-    int foo;
+    int foobar;
     
     //Physical Object Declaration
     
