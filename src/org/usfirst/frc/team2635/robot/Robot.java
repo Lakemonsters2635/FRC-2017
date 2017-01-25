@@ -22,7 +22,14 @@ public class Robot extends IterativeRobot {
 
 	public static final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
 	public static OI oi;
-
+	
+	CANTalon _frontLeftMotor = new CANTalon(12); 		/* device IDs here (1 of 2) */
+	CANTalon _rearLeftMotor = new CANTalon(4);
+	CANTalon _frontRightMotor = new CANTalon(6);
+	CANTalon _rearRightMotor = new CANTalon(9);
+	
+	public RobotMotionProfile robotMotionProfile = new RobotMotionProfile(_frontLeftMotor, _frontRightMotor,
+																		  _rearLeftMotor, _rearRightMotor);
     Command autonomousCommand;
     SendableChooser chooser;
 
@@ -51,7 +58,7 @@ public class Robot extends IterativeRobot {
         
         //Physical Object Initialization
         
-        
+        //robotMotionProfile
         
         //Method Object Initialization
         shooter = new Shooter();
