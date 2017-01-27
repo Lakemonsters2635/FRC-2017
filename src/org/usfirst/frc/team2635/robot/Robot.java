@@ -43,7 +43,7 @@ public class Robot extends IterativeRobot {
     //Method Object Declaration
     Shooter shooter;
     
-    
+    ShooterVision shooterVision;
 
     /**
      * This function is run when the robot is first started up and should be
@@ -61,8 +61,8 @@ public class Robot extends IterativeRobot {
         //robotMotionProfile
         
         //Method Object Initialization
-        shooter = new Shooter();
-        
+        shooterVision = new ShooterVision();
+        shooterVision.shooterCamInit();
            
     }
 	
@@ -112,13 +112,14 @@ public class Robot extends IterativeRobot {
     public void autonomousPeriodic() {
         Scheduler.getInstance().run();
     }
-
+int heyheyhey;
     public void teleopInit() {
 		// This makes sure that the autonomous stops running when
         // teleop starts running. If you want the autonomous to 
         // continue until interrupted by another command, remove
         // this line or comment it out.
         if (autonomousCommand != null) autonomousCommand.cancel();
+        heyheyhey= 4;
     }
 
     /**
@@ -126,6 +127,12 @@ public class Robot extends IterativeRobot {
      */
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
+        
+        if (heyheyhey == 4){
+        shooterVision.createBox();
+        shooterVision.confirmBox();
+        heyheyhey = 10;
+        }
     }
     
     /**
