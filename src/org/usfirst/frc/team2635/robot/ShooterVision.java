@@ -43,41 +43,90 @@ public class ShooterVision {
 			Rect rect = Imgproc.boundingRect(grip.get(i));
 			Imgproc.rectangle( source, rect.tl(), rect.br(), new Scalar(0,0,255), 2, 8, 0 );
 		    }
-		cvSource.putFrame(source);
 		
 		
 	}
 	
 	public void confirmBox(){
-		for( int b = 0; b < grip.size()-1; b = b+2 ){
-			if (boundRect.get(b) != null && boundRect.get(b+1) != null){
-			Rect rect1 = boundRect.get(b);
-			Rect rect2 = boundRect.get(b+1);
-			Rect temp = Imgproc.boundingRect(new MatOfPoint(rect1.tl(),rect2.br()));
+		for( int b = 0; b < boundRect.size(); b++ ){
+			for (int j = 1; j< boundRect.size(); j++){
+			//int j = b;
+			if (boundRect.get(b) != null && boundRect.get(j) != null&&b!=j&&j>b){
 			
-				int topH = rect1.height;
-				int topW = rect1.width;
-				int botH = rect2.height;
-				int botW = rect2.width;
-				
-				int topHalfHeight = topH/2;
-				float comp1 = topHalfHeight/botH;
-				double totalHeight = temp.height*0.4;
-				double comp2 = totalHeight/topH;
-				SmartDashboard.putDouble("hi", comp2);
-				if (0.95<comp1&&comp1<1.05&&0.95<comp2&&comp2<1.05){
-					System.out.println("I found a target!");
-					b=10000;
+			Rect rect1 = boundRect.get(b);
+			Rect rect2 = boundRect.get(j);
+			Rect temp = Imgproc.boundingRect(new MatOfPoint(rect1.br(),rect2.tl()));
+			int topH;
+			int topW;
+			int botH;
+			int botW;
+			//post height of rectangles for debug
+			SmartDashboard.putInt("rect1y",rect1.y);
+			SmartDashboard.putInt("rect2y", rect2.y);
+			//decide which rectangle is top
+				if(rect1.y<rect2.y){
+					topH = rect1.height;
+					topW = rect1.width;
+					botH = rect2.height;
+					botW = rect2.width;
+					//Uncomment to see what box is being tested
+					//Imgproc.rectangle( source, rect1.tl(), rect1.br(), new Scalar(0,0,255), 2, 8, 0 );
 				}
-				
+				else {
+					topH = rect2.height;
+					topW = rect2.width;
+					botH = rect1.height;
+					botW = rect1.width;
+					//Uncomment to see what box is being tested
+					//Imgproc.rectangle( source, rect2.tl(), rect2.br(), new Scalar(0,0,255), 2, 8, 0 );
+				}
+				//create variables to be used for confirmation
+				double topHalfHeight = topH/2;
+				double totalHeight = temp.height*0.4;
+				//Do checks on rectangle pair
+				double comp1 = topHalfHeight/botH;
+				double comp2 = totalHeight/topH;
+				double comp3 = botW/topW;
+				//post used variables
+				SmartDashboard.putDouble("topHalfHeight", topHalfHeight);
+				SmartDashboard.putDouble("botH", botH);
+				//put results of checks
+				SmartDashboard.putDouble("comp1", comp1);
+				SmartDashboard.putDouble("comp2", comp2);
+				SmartDashboard.putDouble("comp3", comp3);
+				if (0.85<comp1&&comp1<1.15&&0.85<comp2&&comp2<1.15&&0.85<comp3&&comp3<1.15){
+					System.out.println("I found a target!");
+					//break out of for loop
+					b=10000;
+					j=10000;
+					//Draw confirmed rectangles
+					Imgproc.rectangle( source, rect2.tl(), rect2.br(), new Scalar(0,0,255), 2, 8, 0 );
+					Imgproc.rectangle( source, rect1.tl(), rect1.br(), new Scalar(0,0,255), 2, 8, 0 );
+					Imgproc.rectangle(source, temp.tl(), temp.br(), new Scalar(0,255,0), 2, 8, 0);
+				}
+			
 				
 			}
-			else{
-				System.out.println("Rectangle was null");
+			
+			/*else{
+				if(boundRect.get(b) == null || boundRect.get(j) == null){
+					//Rectangle is null
+					//System.out.println("Rectangle was null");
+				} else if(b!=j&&j>b){
+					//bad combo
+					//System.out.println("Bad combo of rectangles");
+				}
+			}*/
 			}
-			System.out.println("this is confirmation");
+			//System.out.println("this is confirmation");
 		}
-		SmartDashboard.putInt("hi", boundRect.size());
+		//post size of boundRect arraylist
+		SmartDashboard.putInt("boundrect size", boundRect.size());
+	}
+	
+	public void viewShooter(){
+		//put the processed image with rectangles on smartdashboard
+		cvSource.putFrame(source);
 	}
 	
 	public double getDistance(){
