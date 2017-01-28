@@ -43,7 +43,6 @@ public class Robot extends IterativeRobot {
     //Method Object Declaration
     Shooter shooter;
     
-    ShooterVision shooterVision;
 
     /**
      * This function is run when the robot is first started up and should be
@@ -61,8 +60,8 @@ public class Robot extends IterativeRobot {
         //robotMotionProfile
         
         //Method Object Initialization
-        shooterVision = new ShooterVision();
-        shooterVision.shooterCamInit();
+        shooter = new Shooter();
+        
            
     }
 	
@@ -119,7 +118,6 @@ int heyheyhey;
         // continue until interrupted by another command, remove
         // this line or comment it out.
         if (autonomousCommand != null) autonomousCommand.cancel();
-        heyheyhey= 4;
     }
 
     /**
@@ -127,12 +125,7 @@ int heyheyhey;
      */
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
-        
-        if (heyheyhey == 4){
-        shooterVision.createBox();
-        shooterVision.confirmBox();
-        heyheyhey = 10;
-        }
+        shooter.shoot();
     }
     
     /**

@@ -21,6 +21,9 @@ public class ShooterVision {
 	CvSource cvSource;
 	ArrayList<Rect> boundRect;
 	ArrayList<MatOfPoint> grip;
+	Rect confRectTop;
+	Rect confRectBot;
+	Rect confRectFull;
 	
 	public void shooterCamInit(){
 		GripPipeline = new GripPipeline();
@@ -30,6 +33,9 @@ public class ShooterVision {
 		cvSink.setSource(camera);
 		source = new Mat();
 		cvSource = CameraServer.getInstance().putVideo("new", 640, 480);
+		Rect confRectTop = new Rect();
+		Rect confRectBot = new Rect();
+		Rect confRectFull = new Rect();
 	}
 	
 	public void createBox(){
@@ -103,6 +109,15 @@ public class ShooterVision {
 					Imgproc.rectangle( source, rect2.tl(), rect2.br(), new Scalar(0,0,255), 2, 8, 0 );
 					Imgproc.rectangle( source, rect1.tl(), rect1.br(), new Scalar(0,0,255), 2, 8, 0 );
 					Imgproc.rectangle(source, temp.tl(), temp.br(), new Scalar(0,255,0), 2, 8, 0);
+					//create new variables for correct boxes
+					confRectFull=temp;
+					if(rect1.y<rect2.y){
+						confRectTop=rect1;
+						confRectBot=rect2;
+					} else{
+						confRectTop=rect2;
+						confRectBot=rect1;
+					}
 				}
 			
 				
@@ -122,6 +137,7 @@ public class ShooterVision {
 		}
 		//post size of boundRect arraylist
 		SmartDashboard.putInt("boundrect size", boundRect.size());
+		
 	}
 	
 	public void viewShooter(){
@@ -130,11 +146,11 @@ public class ShooterVision {
 	}
 	
 	public double getDistance(){
-		return 01;
+		return confRectTop.width;
 	}
 	
 	public double getAngle(){
-		return 01;
+		return confRectTop.x;
 	}
 	
 }
