@@ -3,41 +3,46 @@ import com.ctre.CANTalon;
 
 public class RobotMotionProfile {
 
-	public MotionProfile frontLeftTalonProfile;
-	public MotionProfile frontRightTalonProfile;
-	public MotionProfile rearLeftTalonProfile;
-	public MotionProfile rearRightTalonProfile;
+	public MotionProfile LeftTalonProfile;
+	public MotionProfile RightTalonProfile;
+
 	
-	public RobotMotionProfile (CANTalon frontLeft, CANTalon frontRight, CANTalon rearLeft, CANTalon rearRight)
+	public RobotMotionProfile (CANTalon left, CANTalon right)
 	{
-		frontLeftTalonProfile = new MotionProfile(frontLeft);
-		frontRightTalonProfile = new MotionProfile(frontRight);
-		rearLeftTalonProfile = new MotionProfile(rearLeft);
-		rearRightTalonProfile = new MotionProfile(rearRight);
+
+		LeftTalonProfile = new MotionProfile(left);
+		RightTalonProfile = new MotionProfile(left);
 	}
 	
 	public void reset() {
-		frontLeftTalonProfile.reset();
-		frontRightTalonProfile.reset();
-		rearLeftTalonProfile.reset();
-		rearRightTalonProfile.reset();
+		LeftTalonProfile.reset();
+		RightTalonProfile.reset();
+
 	}
 	
 	public void startMotionProfile(){
-		frontLeftTalonProfile.startMotionProfile();
-		frontRightTalonProfile.startMotionProfile();
-		rearLeftTalonProfile.startMotionProfile();
-		rearRightTalonProfile.startMotionProfile();
+		LeftTalonProfile.startMotionProfile();
+		RightTalonProfile.startMotionProfile();
+
 	}
+	
+	
+	public void CaptureRobotStatus()
+	{
+		LeftTalonProfile.CaptureTalonStatus("leftTaon",true);
+		RightTalonProfile.CaptureTalonStatus("rightTalon", true);
+	}
+	
+	
+
 	
 	/**
 	 * Called every loop.
 	 */
 	public void control() {
-		frontLeftTalonProfile.control();
-		frontRightTalonProfile.control();
-		rearLeftTalonProfile.control();
-		rearRightTalonProfile.control();
+		LeftTalonProfile.control();
+		RightTalonProfile.control();
+
 	}
 }
 

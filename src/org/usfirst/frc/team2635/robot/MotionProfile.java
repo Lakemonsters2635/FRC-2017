@@ -91,6 +91,42 @@ public class MotionProfile {
 		_notifer.startPeriodic(0.005);
 	}
 
+	
+	public void CaptureTalonStatus(String talonName, Boolean bEverySecond)
+	{
+		double currentAmps = _talon.getOutputCurrent();
+		double outputV = _talon.getOutputVoltage();
+		double busV = _talon.getBusVoltage();
+		double quadEncoderPos = _talon.getEncPosition();
+		double quadEncoderVelocity = _talon.getEncVelocity();
+		int analogPos = _talon.getAnalogInPosition();
+		int analogVelocity = _talon.getAnalogInVelocity();
+		double selectedSensorPos = _talon.getPosition();
+		double selectedSensorSpeed = _talon.getSpeed();
+		int closeLoopErr = _talon.getClosedLoopError();
+		
+		if (bEverySecond)
+		{
+			System.out.println("currentAmps:" + currentAmps);
+			System.out.println("outputV:" + outputV);
+			System.out.println("busV:" + busV);
+			System.out.println("");
+			System.out.println("quadEncoderPos:" + quadEncoderPos);
+			System.out.println("quadEncoderVelocity:" + quadEncoderVelocity);
+			System.out.println("");
+			System.out.println("analogPos:" + analogPos);
+			System.out.println("analogVelocity:" + analogVelocity);
+			System.out.println("");
+			System.out.println("selectedSensorPos:" + selectedSensorPos);
+			System.out.println("selectedSensorSpeed:" + selectedSensorSpeed);
+			System.out.println("");
+			System.out.println("closeLoopErr:" + closeLoopErr);
+
+		}
+		
+	}
+	
+	
 	/**
 	 * Called to clear Motion profile buffer and reset state info during
 	 * disabled and when Talon is not in MP control mode.
