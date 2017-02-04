@@ -7,13 +7,13 @@ import edu.wpi.first.wpilibj.RobotDrive;
 
 public class Drive
 {
-	RobotDrive drive;
+	RobotDrive robodrive;
 	
 	public Joystick leftJoystick;
 	public Joystick rightJoystick;
 	
 	public void setMotors(CANTalon frontLeft, CANTalon backLeft, CANTalon frontRight, CANTalon backRight) {
-		drive = new RobotDrive(frontLeft, backLeft, frontRight, backRight);
+		robodrive = new RobotDrive(frontLeft, backLeft, frontRight, backRight);
 	}
 	
 	public void setSticks(Joystick leftStick, Joystick rightStick) {
@@ -22,7 +22,7 @@ public class Drive
 	}
 	
 	public void tankDrive() {
-		drive.tankDrive(leftJoystick, rightJoystick);
+		robodrive.tankDrive(leftJoystick, rightJoystick);
 	}
 	
 	

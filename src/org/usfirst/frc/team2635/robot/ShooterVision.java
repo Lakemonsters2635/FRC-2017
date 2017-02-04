@@ -68,10 +68,10 @@ public class ShooterVision {
 			int topW;
 			int botH;
 			int botW;
-			//post height of rectangles for debug
+			//Post height of rectangles for debug
 			SmartDashboard.putInt("rect1y",rect1.y);
 			SmartDashboard.putInt("rect2y", rect2.y);
-			//decide which rectangle is top
+			//Decide which rectangle is top
 				if(rect1.y<rect2.y){
 					topH = rect1.height;
 					topW = rect1.width;
@@ -88,31 +88,31 @@ public class ShooterVision {
 					//Uncomment to see what box is being tested
 					//Imgproc.rectangle( source, rect2.tl(), rect2.br(), new Scalar(0,0,255), 2, 8, 0 );
 				}
-				//create variables to be used for confirmation
+				//Create variables to be used for confirmation
 				double topHalfHeight = topH/2;
 				double totalHeight = temp.height*0.4;
 				//Do checks on rectangle pair
 				double comp1 = topHalfHeight/botH;
 				double comp2 = totalHeight/topH;
 				double comp3 = botW/topW;
-				//post used variables
+				//Post used variables
 				SmartDashboard.putDouble("topHalfHeight", topHalfHeight);
 				SmartDashboard.putDouble("botH", botH);
-				//put results of checks
+				//Post results of checks
 				SmartDashboard.putDouble("comp1", comp1);
 				SmartDashboard.putDouble("comp2", comp2);
 				SmartDashboard.putDouble("comp3", comp3);
 				if (0.85<comp1&&comp1<1.15&&0.85<comp2&&comp2<1.15&&0.85<comp3&&comp3<1.15){
 					System.out.println("Target Found");
-					//break out of for loop
+					//Break out of for loop
 					b=10000;
 					j=10000;
 					//Draw confirmed rectangles
 					Imgproc.rectangle( source, rect2.tl(), rect2.br(), new Scalar(0,0,255), 2, 8, 0 );
 					Imgproc.rectangle( source, rect1.tl(), rect1.br(), new Scalar(0,0,255), 2, 8, 0 );
 					Imgproc.rectangle( source, temp.tl(),  temp.br(),  new Scalar(0,255,0), 2, 8, 0);
-					//create new variables for correct boxes
-					confRectFull=temp;
+					//Create new variables for correct boxes
+					confRectFull=temp; 
 					if(rect1.y<rect2.y){
 						confRectTop=rect1;
 						confRectBot=rect2;
@@ -141,7 +141,7 @@ public class ShooterVision {
 			}
 			//System.out.println("this is confirmation");
 		}
-		//post size of boundRect arraylist
+		//Post size of boundRect arraylist
 		SmartDashboard.putInt("boundrect array size", boundRect.size());
 		
 	}

@@ -13,5 +13,5 @@ public class Shooter
 		shooterVision.confirmBox();
 		shooterVision.viewShooter();
 	}
-	
+	//NOTE: Change shoot() to a state, like shoot in bunnybots, as to make capable of firing separate balls and better control
 }
