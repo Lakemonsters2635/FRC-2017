@@ -142,7 +142,7 @@ public class ShooterVision {
 			//System.out.println("this is confirmation");
 		}
 		//post size of boundRect arraylist
-		SmartDashboard.putInt("boundrect size", boundRect.size());
+		SmartDashboard.putInt("boundrect array size", boundRect.size());
 		
 	}
 	
