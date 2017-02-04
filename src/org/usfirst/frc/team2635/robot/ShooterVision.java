@@ -33,9 +33,9 @@ public class ShooterVision {
 		cvSink.setSource(camera);
 		source = new Mat();
 		cvSource = CameraServer.getInstance().putVideo("new", 640, 480);
-		Rect confRectTop = new Rect();
-		Rect confRectBot = new Rect();
-		Rect confRectFull = new Rect();
+		confRectTop = new Rect();
+		confRectBot = new Rect();
+		confRectFull = new Rect();
 	}
 	
 	public void createBox(){
@@ -43,16 +43,18 @@ public class ShooterVision {
 		cvSink.grabFrame(source);
 		GripPipeline.process(source);
 		grip = GripPipeline.findContoursOutput();
+		//set and draw all boxes
 		for( int i = 0; i< grip.size(); i++ ){
 			Imgproc.drawContours(source, grip, i, new Scalar(0, 255,0),1);	
 			boundRect.add(Imgproc.boundingRect(grip.get(i)));
-			Rect rect = Imgproc.boundingRect(grip.get(i));
-			Imgproc.rectangle( source, rect.tl(), rect.br(), new Scalar(0,0,255), 2, 8, 0 );
+			//Rect rect = Imgproc.boundingRect(grip.get(i));
+			//Imgproc.rectangle( source, rect.tl(), rect.br(), new Scalar(0,0,255), 2, 8, 0 );
 		    }
 		
 		
 	}
 	
+	@SuppressWarnings("deprecation")
 	public void confirmBox(){
 		for( int b = 0; b < boundRect.size(); b++ ){
 			for (int j = 1; j< boundRect.size(); j++){
@@ -101,14 +103,14 @@ public class ShooterVision {
 				SmartDashboard.putDouble("comp2", comp2);
 				SmartDashboard.putDouble("comp3", comp3);
 				if (0.85<comp1&&comp1<1.15&&0.85<comp2&&comp2<1.15&&0.85<comp3&&comp3<1.15){
-					System.out.println("I found a target!");
+					System.out.println("Target Found");
 					//break out of for loop
 					b=10000;
 					j=10000;
 					//Draw confirmed rectangles
 					Imgproc.rectangle( source, rect2.tl(), rect2.br(), new Scalar(0,0,255), 2, 8, 0 );
 					Imgproc.rectangle( source, rect1.tl(), rect1.br(), new Scalar(0,0,255), 2, 8, 0 );
-					Imgproc.rectangle(source, temp.tl(), temp.br(), new Scalar(0,255,0), 2, 8, 0);
+					Imgproc.rectangle( source, temp.tl(),  temp.br(),  new Scalar(0,255,0), 2, 8, 0);
 					//create new variables for correct boxes
 					confRectFull=temp;
 					if(rect1.y<rect2.y){
@@ -118,6 +120,10 @@ public class ShooterVision {
 						confRectTop=rect2;
 						confRectBot=rect1;
 					}
+				}else {
+					//NO Target Found!!!
+					System.out.println("No Target");
+					//NOTE: use something better than print to alert operator
 				}
 			
 				
