@@ -123,7 +123,7 @@ public void teleopInit() {
      */
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
-        //shooter.shoot();
+        shooter.shoot();
     }
     
     /**

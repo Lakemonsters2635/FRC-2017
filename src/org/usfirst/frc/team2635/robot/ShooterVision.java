@@ -40,13 +40,16 @@ public class ShooterVision {
 	
 	public void createBox(){
 		boundRect = new ArrayList<Rect>();
+		//Get frame from camera
 		cvSink.grabFrame(source);
+		//Use Grip Code
 		GripPipeline.process(source);
 		grip = GripPipeline.findContoursOutput();
 		//set and draw all boxes
 		for( int i = 0; i< grip.size(); i++ ){
 			Imgproc.drawContours(source, grip, i, new Scalar(0, 255,0),1);	
 			boundRect.add(Imgproc.boundingRect(grip.get(i)));
+			//Uncomment to view all drawn boxes
 			//Rect rect = Imgproc.boundingRect(grip.get(i));
 			//Imgproc.rectangle( source, rect.tl(), rect.br(), new Scalar(0,0,255), 2, 8, 0 );
 		    }
@@ -63,7 +66,7 @@ public class ShooterVision {
 			
 			Rect rect1 = boundRect.get(b);
 			Rect rect2 = boundRect.get(j);
-			Rect temp = Imgproc.boundingRect(new MatOfPoint(rect1.br(),rect2.tl()));
+			Rect temp;
 			int topH;
 			int topW;
 			int botH;
@@ -77,6 +80,7 @@ public class ShooterVision {
 					topW = rect1.width;
 					botH = rect2.height;
 					botW = rect2.width;
+					temp = Imgproc.boundingRect(new MatOfPoint(rect2.br(),rect1.tl()));
 					//Uncomment to see what box is being tested
 					//Imgproc.rectangle( source, rect1.tl(), rect1.br(), new Scalar(0,0,255), 2, 8, 0 );
 				}
@@ -85,6 +89,7 @@ public class ShooterVision {
 					topW = rect2.width;
 					botH = rect1.height;
 					botW = rect1.width;
+					temp = Imgproc.boundingRect(new MatOfPoint(rect1.br(),rect2.tl()));
 					//Uncomment to see what box is being tested
 					//Imgproc.rectangle( source, rect2.tl(), rect2.br(), new Scalar(0,0,255), 2, 8, 0 );
 				}
@@ -123,7 +128,8 @@ public class ShooterVision {
 				}else {
 					//NO Target Found!!!
 					System.out.println("No Target");
-					//NOTE: use something better than print to alert operator
+					//NOTE: Use something better than print to alert operator that no target was found
+					//and do something to continue, like try the cycle again
 				}
 			
 				
@@ -135,7 +141,7 @@ public class ShooterVision {
 					//System.out.println("Rectangle was null");
 				} else if(b!=j&&j>b){
 					//bad combo
-					//System.out.println("Bad combo of rectangles");
+					//System.out.println("Bad combo of rectangles, try triangles");
 				}
 			}*/
 			}
@@ -147,7 +153,7 @@ public class ShooterVision {
 	}
 	
 	public void viewShooter(){
-		//put the processed image with rectangles on smartdashboard
+		//put the processed image with rectangles on smartdashboard and beware of the triangles
 		cvSource.putFrame(source);
 	}
 	
@@ -160,3 +166,4 @@ public class ShooterVision {
 	}
 	
 }
+//You've seen nothing
