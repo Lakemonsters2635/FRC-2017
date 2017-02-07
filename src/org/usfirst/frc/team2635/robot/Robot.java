@@ -24,9 +24,12 @@ public class Robot extends IterativeRobot {
 	public static OI oi;
 	
 		/* device IDs here (1 of 2) */
-	CANTalon _leftMotor = new CANTalon(4);
-	CANTalon _rightMotor = new CANTalon(6);
-
+public static final int LEFT_MOTOR_CHANNEL = 3;
+public static final int LEFT_FOLLOWER_CHANNEL = 4;
+public static final int RIGHT_MOTOR_CHANNEL = 1;
+public static final int RIGHT_FOLLOWER_CHANNEL = 2;
+public static final int CLIMB_MOTOR_CHANNEL = 8;
+public static final int CLIMB_FOLLOWER_CHANNEL = 9;
 	
 	public RobotMotionProfile robotMotionProfile = new RobotMotionProfile(_leftMotor, _rightMotor);
     Command autonomousCommand;
@@ -36,8 +39,12 @@ public class Robot extends IterativeRobot {
 
     
     //Physical Object Declaration
-    
-    
+    CANTalon leftMotor;
+	CANTalon leftFollower;
+	CANTalon rightMotor;
+	CANTalon rightFollower;
+	CANTalon climbMotor;
+	CANTalon climbFollower;
     
     //Method Object Declaration
     Shooter shooter;
@@ -55,13 +62,27 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putData("Auto mode", chooser);
         
         //Physical Object Initialization
-        
+        leftMotor = new CANTalon(LEFT_MOTOR_CHANNEL);
+        leftFollower = new CANTalon(LEFT_FOLLOWER_CHANNEL);
+        rightMotor = new CANTalon(RIGHT_MOTOR_CHANNEL);
+        rightFollower = new CANTalon(RIGHT_FOLLOWER_CHANNEL);
+        climbMotor = new CANTalon(CLIMB_MOTOR_CHANNEL);
+        climbFollower = new CANTalon(CLIMB_FOLLOWER_CHANNEL);
         //robotMotionProfile
         
         //Method Object Initialization
         shooter = new Shooter();
         
-           
+        //Set Follower Talons
+        leftFollower.changeControlMode(CANTalon.TalonControlMode.Follower);
+        leftFollower.set(leftMotor.getDeviceID());
+        
+        rightFollower.changeControlMode(CANTalon.TalonControlMode.Follower);
+        rightFollower.set(rightMotor.getDeviceID());
+        
+        climbFollower.changeControlMode(CANTalon.TalonControlMode.Follower);
+        climbFollower.set(climbMotor.getDeviceID());
+        
     }
 	
 	/**
