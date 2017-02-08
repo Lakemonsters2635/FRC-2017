@@ -60,7 +60,7 @@ public class Robot extends IterativeRobot {
         
         //Method Object Initialization
         shooter = new Shooter();
-        
+        shooter.shootInit();
            
     }
 	

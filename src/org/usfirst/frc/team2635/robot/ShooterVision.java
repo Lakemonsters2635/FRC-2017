@@ -47,7 +47,7 @@ public class ShooterVision {
 		grip = GripPipeline.findContoursOutput();
 		//set and draw all boxes
 		for( int i = 0; i< grip.size(); i++ ){
-			Imgproc.drawContours(source, grip, i, new Scalar(0, 255,0),1);	
+			Imgproc.drawContours(source, grip, i, new Scalar(255, 0,0),1);
 			boundRect.add(Imgproc.boundingRect(grip.get(i)));
 			//Uncomment to view all drawn boxes
 			//Rect rect = Imgproc.boundingRect(grip.get(i));
@@ -158,12 +158,12 @@ public class ShooterVision {
 	}
 	
 	public double getDistance(){
-		return confRectTop.width;
+		return confRectTop.width; 
 	}
 	
 	public double getAngle(){
 		return confRectTop.x;
 	}
 	
-}
-//You've seen nothing
+} 
+//You've Seen Nothing 

@@ -4,7 +4,7 @@ public class Shooter
 {
 	ShooterVision shooterVision;
 	public void shootInit(){
-		shooterVision= new ShooterVision();
+		shooterVision = new ShooterVision();
 		shooterVision.shooterCamInit();
 	}
 	
