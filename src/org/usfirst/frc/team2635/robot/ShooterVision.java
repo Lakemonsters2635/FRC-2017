@@ -1,17 +1,11 @@
 package org.usfirst.frc.team2635.robot;
 
-import java.util.ArrayList;
-
-import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
+import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
-import edu.wpi.cscore.CvSink;
-import edu.wpi.cscore.CvSource;
-import edu.wpi.cscore.UsbCamera;
-import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ShooterVision extends Vision {
@@ -101,7 +95,7 @@ public class ShooterVision extends Vision {
 				if(boundRect.get(b) == null || boundRect.get(j) == null){
 					//Rectangle is null
 					//System.out.println("Rectangle was null");
-				} else if(b!=j&&j>b){
+				} else if(b!=j && j>b){
 					//bad combo
 					//System.out.println("Bad combo of rectangles, try triangles");
 				}
@@ -120,11 +114,21 @@ public class ShooterVision extends Vision {
 	}
 	
 	public double getDistance(){
-		return confRectTop.width; 
+		Point right = confRectTop.br();
+		Point left = confRectTop.tl();
+		double parthalf = right.x-left.x;
+		parthalf = parthalf/2;
+		double half = left.x + parthalf;
+		return half;
 	}
 	
 	public double getAngle(){
-		return confRectTop.x;
+		Point bot = confRectTop.br();
+		Point top = confRectTop.tl();
+		double parthalf = bot.y-top.y;
+		parthalf = parthalf/2;
+		double half = top.y + parthalf;
+		return half;
 	}
 	
 } 

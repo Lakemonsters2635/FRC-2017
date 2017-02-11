@@ -2,7 +2,7 @@ package org.usfirst.frc.team2635.robot;
 
 public class Shooter
 {
-	enum shootEnum {INIT, FINDTARGET, AIM, SHOOTING, RESET}
+	enum shootEnum {INIT, SHOOTING, RESET}
 	shootEnum shootState = shootEnum.INIT;
 	ShooterVision shooterVision;
 	Vision vision;
@@ -25,31 +25,7 @@ public class Shooter
 		switch(shootState){
 		case INIT:
 			if (button){
-				shootState=shootEnum.FINDTARGET;
-			}
-			break;
-		case FINDTARGET:
-			if(button){
-				shooterVision.createBox();
-				shooterVision.confirmBox();
-				shooterVision.viewShooter();
-				shootState=shootEnum.AIM;
-			}
-			else{
-				shootState=shootEnum.INIT;
-			}
-			break;
-		case AIM:
-			if(button /*distance and angle are correct*/){
 				shootState=shootEnum.SHOOTING;
-			}
-			else if(button){
-				//shooterVision.getAngle();
-				//shooterVision.getDistance();
-				//Drive to compensate
-				//NOTE:Make so driver can't drive while aiming/shooting
-			} else{
-				shootState=shootEnum.INIT;
 			}
 			break;
 		case SHOOTING:
