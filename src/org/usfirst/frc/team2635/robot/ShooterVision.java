@@ -114,6 +114,7 @@ public class ShooterVision extends Vision {
 	}
 	
 	public double getDistance(){
+		//get x of middle of rect
 		Point right = confRectTop.br();
 		Point left = confRectTop.tl();
 		double parthalf = right.x-left.x;
@@ -123,6 +124,7 @@ public class ShooterVision extends Vision {
 	}
 	
 	public double getAngle(){
+		//get y of middle of rect 
 		Point bot = confRectTop.br();
 		Point top = confRectTop.tl();
 		double parthalf = bot.y-top.y;

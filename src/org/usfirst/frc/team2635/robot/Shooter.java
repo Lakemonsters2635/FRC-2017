@@ -14,7 +14,7 @@ public class Shooter
 	
 	public void flywheelStart(){
 		//code to run fly wheel or have in separate class
-	}
+		}
 	
 	public void shoot(){
 		shooterVision.createBox();
@@ -31,7 +31,7 @@ public class Shooter
 		case SHOOTING:
 			if(button /*||in progress of moving door*/){
 			//Open door
-			//Start agitator
+			//Start agitator or agitator may always be going?
 			//Already running fly wheel
 			}
 			else {
