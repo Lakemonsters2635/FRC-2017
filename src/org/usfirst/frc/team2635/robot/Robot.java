@@ -3,6 +3,7 @@ package org.usfirst.frc.team2635.robot;
 import com.ctre.CANTalon;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
@@ -23,30 +24,43 @@ public class Robot extends IterativeRobot {
 	public static final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
 	public static OI oi;
 	
-		/* device IDs here (1 of 2) */
-	CANTalon _leftMotor = new CANTalon(4);
-	CANTalon _rightMotor = new CANTalon(6);
+	//Constants
+	public static final int RIGHT_MOTOR_CHANNEL = 1;
+	public static final int RIGHT_FOLLOWER_CHANNEL = 2;
+	public static final int LEFT_MOTOR_CHANNEL = 3;
+	public static final int LEFT_FOLLOWER_CHANNEL = 4;
+	public static final int CLIMB_MOTOR_CHANNEL = 8;
+	public static final int CLIMB_FOLLOWER_CHANNEL = 9; 
+	public static final float CLIMB_MOTOR_MAX_VOLTAGE = 12.0f;
+	public static final int PICKUP_MOTOR_CHANNEL = 7;
+	public static final float PICKUP_MOTOR_MAX_VOLTAGE = 12.0f;
+	public static final int LEFT_STICK_CHANNEL = 1;
+	public static final int RIGHT_STICK_CHANNEL = 2;
 
 	
-	public RobotMotionProfile robotMotionProfile = new RobotMotionProfile(_leftMotor, _rightMotor);
+	//public RobotMotionProfile robotMotionProfile = new RobotMotionProfile(_leftMotor, _rightMotor);
     Command autonomousCommand;
     SendableChooser chooser;
 
-    
-
-    
     //Physical Object Declaration
-    
+    CANTalon rightMotor;
+    CANTalon rightFollower;
+    CANTalon leftMotor;
+    CANTalon leftFollower;
+    CANTalon climbMotor;
+    CANTalon climbFollower;
+    CANTalon pickupMotor;
+    Joystick leftStick;
+    Joystick rightStick;
     
     
     //Method Object Declaration
     Shooter shooter;
+    BallPickup pickup;
+    RopeClimber climber;
     
 
-    /**
-     * This function is run when the robot is first started up and should be
-     * used for any initialization code.
-     */
+
     public void robotInit() {
 		oi = new OI();
         chooser = new SendableChooser();
@@ -55,13 +69,43 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putData("Auto mode", chooser);
         
         //Physical Object Initialization
+        rightMotor = new CANTalon(RIGHT_MOTOR_CHANNEL);
+        rightFollower = new CANTalon(RIGHT_FOLLOWER_CHANNEL);
+        leftMotor = new CANTalon(LEFT_MOTOR_CHANNEL);
+        leftFollower = new CANTalon(LEFT_FOLLOWER_CHANNEL);
+        climbMotor = new CANTalon(CLIMB_MOTOR_CHANNEL);
+        climbFollower = new CANTalon(CLIMB_FOLLOWER_CHANNEL);
+        pickupMotor = new CANTalon(PICKUP_MOTOR_CHANNEL);
+        leftStick = new Joystick(LEFT_STICK_CHANNEL);
+        rightStick = new Joystick(RIGHT_STICK_CHANNEL);
         
         //robotMotionProfile
         
         //Method Object Initialization
         shooter = new Shooter();
+        pickup = new BallPickup();
+        climber = new RopeClimber();
+        
+        //Motor Follower Initialization
+        rightFollower.changeControlMode(CANTalon.TalonControlMode.Follower);
+        rightFollower.set(rightMotor.getDeviceID());
+        leftFollower.changeControlMode(CANTalon.TalonControlMode.Follower);
+        leftFollower.set(leftMotor.getDeviceID());
+        climbFollower.changeControlMode(CANTalon.TalonControlMode.Follower);
+        climbFollower.set(climbMotor.getDeviceID());
+        
+        //Motor Mode Initialization
+        pickupMotor.changeControlMode(CANTalon.TalonControlMode.Voltage);
+        pickupMotor.configPeakOutputVoltage(PICKUP_MOTOR_MAX_VOLTAGE, -PICKUP_MOTOR_MAX_VOLTAGE);
+        climbMotor.changeControlMode(CANTalon.TalonControlMode.Voltage);
+        climbMotor.configPeakOutputVoltage(CLIMB_MOTOR_MAX_VOLTAGE, -CLIMB_MOTOR_MAX_VOLTAGE);
+        
+        //Method Object Setup
         shooter.shootInit();
-           
+        pickup.setMotor(pickupMotor);
+        pickup.setStick(leftStick);
+        climber.setMotor(climbMotor);
+        climber.setStick(leftStick);
     }
 	
 	/**
@@ -124,6 +168,9 @@ public void teleopInit() {
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
         shooter.shoot();
+        
+        climber.ropeClimb();
+        pickup.ballPickup();
     }
     
     /**
