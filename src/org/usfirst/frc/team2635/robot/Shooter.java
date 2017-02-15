@@ -1,26 +1,91 @@
 package org.usfirst.frc.team2635.robot;
 
+import com.ctre.CANTalon;
+
+import edu.wpi.first.wpilibj.Joystick;
+
 public class Shooter
 {
 	enum shootEnum {INIT, SHOOTING, RESET}
 	shootEnum shootState = shootEnum.INIT;
+	enum doorEnum {IN, CHANGING, OUT}
+	doorEnum doorState = doorEnum.IN;
 	ShooterVision shooterVision;
 	Vision vision;
+	int prevmode;
+	CANTalon flywheel;
+	CANTalon door;
+	Joystick stick;
+	public static final int FLYWHEEL_BUTTON = 0;
+	public static final int DOOR_BUTTON = 1;
 	public void shootInit(){
 		shooterVision = new ShooterVision();
 		vision = new Vision();
 		vision.camInit();
 	}
 	
-	public void flywheelStart(){
-		//code to run fly wheel or have in separate class
+	public void setFlywheel(CANTalon motor) {
+		this.flywheel = motor;
+	}
+	
+	public void setDoor(CANTalon motor){
+		this.door = motor;
+		//Change door to whatever is used to control pneumatics
+	}
+	
+	public void setStick(Joystick stick) {
+		this.stick = stick;
+	}
+	
+	public void flywheel(){
+		if (stick.getRawButton(FLYWHEEL_BUTTON)) {
+			flywheel.set(6);
 		}
+		else{
+			flywheel.set(0);
+		}
+	}
+	
+	public void door(Boolean button){
+		//Change door to whatever is used to control pneumatics
+		switch(doorState){
+		case IN:
+			prevmode = 0;
+			if (stick.getRawButton(DOOR_BUTTON)) doorState = doorEnum.CHANGING;
+			
+			break;
+			
+		case CHANGING:
+			if (prevmode == 0){
+				//push door out
+				doorState = doorEnum.OUT;
+			}
+			else if (prevmode == 1){
+				//pull door in
+				doorState = doorEnum.IN;
+			} 
+			else {
+				//Well sh*t I didn't think this would happen
+			}
+			//NOTES: If there is a switch like at bunny bots we will need to use that
+			break;
+			
+		case OUT:
+			prevmode = 1;
+			if (stick.getRawButton(DOOR_BUTTON)) doorState = doorEnum.CHANGING;
+			
+			break;
+		}
+			
+		
+	}
 	
 	public void shoot(){
 		shooterVision.createBox();
 		shooterVision.confirmBox();
 		shooterVision.viewShooter();
 	}
+	
 	public void shootUpdate(boolean button){
 		switch(shootState){
 		case INIT:
@@ -31,8 +96,7 @@ public class Shooter
 		case SHOOTING:
 			if(button /*||in progress of moving door*/){
 			//Open door
-			//Start agitator or agitator may always be going?
-			//Already running fly wheel
+			//Already running flywheel
 			}
 			else {
 				shootState=shootEnum.RESET;
@@ -40,7 +104,6 @@ public class Shooter
 			break;
 		case RESET:
 			//Close door
-			//Stop agitator
 			break;
 		default:
 			break;
