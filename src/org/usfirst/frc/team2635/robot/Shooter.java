@@ -36,13 +36,13 @@ public class Shooter
 		}
 	}
 	
-	public void setFlywheel(CANTalon motor) {
+	public void setFlywheel(CANTalon motor) { 
 		this.flywheel = motor;
 	}
 	
 	public void setDoor(CANTalon motor){
 		this.door = motor;
-		//Change door to whatever is used to control pneumatics
+		//Change door to whatever is used to control poomatics
 	}
 	
 	public void setStick(Joystick stick) {
@@ -59,7 +59,7 @@ public class Shooter
 	}
 	
 	public void door(Boolean button){
-		//Change door to whatever is used to control pneumatics
+		//Change door to whatever is used to control pneuumatics
 		switch(doorState){
 		case IN:
 			prevmode = 0;
@@ -77,7 +77,7 @@ public class Shooter
 				doorState = doorEnum.IN;
 			} 
 			else {
-				//Well sh*t I didn't think this would happen
+				//Well sh*te I didn't think this would happen
 			}
 			//NOTES: If there is a switch like at bunny bots we will need to use that
 			break;
@@ -112,7 +112,7 @@ public class Shooter
 		case SHOOTING:
 			if(button /*||in progress of moving door*/){
 			//Open door
-			//Already running flywheel
+			//Already running flyweel
 			}
 			else {
 				shootState=shootEnum.RESET;
@@ -127,3 +127,4 @@ public class Shooter
 	}
 	//NOTE: Change shoot() to a state, like shoot in bunnybots, as to make capable of firing separate balls and better control
 }
+//bag and tag? more like... snag and gulag. I'll show myself out
