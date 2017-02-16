@@ -25,15 +25,23 @@ public class Robot extends IterativeRobot {
 	public static OI oi;
 	
 	//Constants
-	public static final int RIGHT_MOTOR_CHANNEL = 9;
+	public static final int RIGHT_MOTOR_CHANNEL = 0;
 	public static final int RIGHT_FOLLOWER_CHANNEL = 6;
-	public static final int LEFT_MOTOR_CHANNEL = 4;
+	public static final int LEFT_MOTOR_CHANNEL = 0;
 	public static final int LEFT_FOLLOWER_CHANNEL = 12;
+	
 	public static final int CLIMB_MOTOR_CHANNEL = 0;
 	public static final int CLIMB_FOLLOWER_CHANNEL = 0; 
 	public static final float CLIMB_MOTOR_MAX_VOLTAGE = 12.0f;
-	public static final int PICKUP_MOTOR_CHANNEL = 0;
+	public static final int CLIMB_BUTTON_ID = 1;
+	public static final int CLIMB_MOTOR_VOLTAGE = 12;
+	
+	public static final int PICKUP_MOTOR_CHANNEL = 9;
 	public static final float PICKUP_MOTOR_MAX_VOLTAGE = 12.0f;
+	public static final int PICKUP_CLOCKWISE_BUTTON_ID = 4;
+	public static final int PICKUP_COUNTER_CLOCKWISE_BUTTON_ID = 5;
+	public static final int PICKUP_MOTOR_VOLTAGE = 6;
+	
 	public static final int LEFT_STICK_CHANNEL = 1;
 	public static final int RIGHT_STICK_CHANNEL = 0;
 
@@ -61,7 +69,12 @@ public class Robot extends IterativeRobot {
     RopeClimber climber;
     Drive drive;
     
-
+    //Variable Declaration
+    boolean pickupForward;
+    boolean pickupOn;
+    
+    boolean [] _leftBtnsLast = {false,false,false,false,false,false,false,false,false,false};
+    boolean [] _rightBtnsLast = {false,false,false,false,false,false,false,false,false,false};
 
     public void robotInit() {
 		oi = new OI();
@@ -89,6 +102,9 @@ public class Robot extends IterativeRobot {
         climber = new RopeClimber();
         drive = new Drive();
         
+        //Variable Initialization
+        pickupForward = true;
+        
         //Motor Follower Initialization
         rightFollower.changeControlMode(CANTalon.TalonControlMode.Follower);
         rightFollower.set(rightMotor.getDeviceID());
@@ -104,13 +120,12 @@ public class Robot extends IterativeRobot {
         climbMotor.configPeakOutputVoltage(CLIMB_MOTOR_MAX_VOLTAGE, -CLIMB_MOTOR_MAX_VOLTAGE);
         
         //Method Object Setup
-        shooter.shootInit();
-        pickup.setMotor(pickupMotor);
-        pickup.setStick(leftStick);
-        climber.setMotor(climbMotor);
-        climber.setStick(leftStick);
-        drive.setMotors(leftMotor, rightMotor);
-        drive.setSticks(leftStick, rightStick);
+ 
+        	shooter.shootInit();
+
+        pickup.init(pickupMotor, leftStick, PICKUP_CLOCKWISE_BUTTON_ID, PICKUP_COUNTER_CLOCKWISE_BUTTON_ID, PICKUP_MOTOR_VOLTAGE);
+        climber.init(climbMotor, leftStick, CLIMB_BUTTON_ID, CLIMB_MOTOR_VOLTAGE);
+        drive.init(leftStick, rightStick, leftMotor, rightMotor);
     }
 	
 	/**
@@ -172,11 +187,39 @@ public void teleopInit() {
      */
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
-        shooter.shoot();
         
+		boolean [] leftBtns= new boolean [_leftBtnsLast.length];
+		for(int i=1;i<_leftBtnsLast.length;++i)
+			leftBtns[i] = leftStick.getRawButton(i);
+
+		boolean [] rightBtns= new boolean [_rightBtnsLast.length];
+		for(int i=1;i<_rightBtnsLast.length;++i)
+			rightBtns[i] = rightStick.getRawButton(i);		
+		
+		if(leftBtns[PICKUP_CLOCKWISE_BUTTON_ID] && !_leftBtnsLast[PICKUP_CLOCKWISE_BUTTON_ID]) {
+			pickupOn = true;
+			pickupForward = true;
+		} 
+		else if(!leftBtns[PICKUP_CLOCKWISE_BUTTON_ID] && _leftBtnsLast[PICKUP_CLOCKWISE_BUTTON_ID]) {
+			pickupOn = false;
+			pickupForward = true;
+		}
+		//else if()
+        shooter.shoot();
+
+        pickup.ballPickup(pickupOn, pickupForward);
         climber.ropeClimb();
-        pickup.ballPickup();
+
         drive.tankDrive();
+        
+        
+        
+        
+        
+		for(int i=1;i<_leftBtnsLast.length;++i)
+			_leftBtnsLast[i] = leftBtns[i];
+		for(int i=1;i<_rightBtnsLast.length;++i)
+			_rightBtnsLast[i] = rightBtns[i];
     }
     
     /**

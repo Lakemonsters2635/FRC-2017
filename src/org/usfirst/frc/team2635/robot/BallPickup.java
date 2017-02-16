@@ -5,30 +5,31 @@ import com.ctre.CANTalon;
 import edu.wpi.first.wpilibj.Joystick;
 
 public class BallPickup {
-	public static final int CLOCKWISE_BUTTON_ID = 1;
-	public static final int COUNTER_CLOCKWISE_BUTTON_ID = 2;
-	public static final int MOTOR_VOLTAGE = 6;
+	public int clockwiseID;
+	public int counterClockwiseID;
+	public int motorVoltage;
 	
 	CANTalon motor;
 	Joystick stick;
 	
-	public void setMotor(CANTalon motor) {
+	public void init(CANTalon motor, Joystick stick, int clockwiseID, int counterClockwiseID, int motorVoltage) {
 		this.motor = motor;
-	}
-	
-	public void setStick(Joystick stick) {
 		this.stick = stick;
+		this.clockwiseID = clockwiseID;
+		this.counterClockwiseID = counterClockwiseID;
+		this.motorVoltage = motorVoltage;
+		
 	}
 	
-	public void ballPickup() {
-		if(stick.getRawButton(CLOCKWISE_BUTTON_ID) && !stick.getRawButton(COUNTER_CLOCKWISE_BUTTON_ID)) {
-			motor.set(MOTOR_VOLTAGE);
+	public void ballPickup(boolean on, boolean forward) {
+		if(on && forward) {
+			motor.set(motorVoltage);
 		} 
-		else if(!stick.getRawButton(CLOCKWISE_BUTTON_ID) && !stick.getRawButton(COUNTER_CLOCKWISE_BUTTON_ID)) {
+		else if(!on) {
 			motor.set(0);
 		} 
-		else if(!stick.getRawButton(CLOCKWISE_BUTTON_ID) && stick.getRawButton(COUNTER_CLOCKWISE_BUTTON_ID)) {
-			motor.set(-MOTOR_VOLTAGE);
+		else if(on && !forward) {
+			motor.set(-motorVoltage);
 		}
 	}
 }

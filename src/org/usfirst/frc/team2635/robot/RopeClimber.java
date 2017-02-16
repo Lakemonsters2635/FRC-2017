@@ -5,21 +5,21 @@ import com.ctre.CANTalon;
 import edu.wpi.first.wpilibj.Joystick;
 
 public class RopeClimber {
-	public static final int CLIMB_BUTTON_ID = 1;
+	public int buttonID;
+	public int motorVoltage;
 	CANTalon motor;
 	Joystick stick;
 	
-	public void setMotor(CANTalon motor) {
+	public void init(CANTalon motor, Joystick stick, int buttonID, int motorVoltage) {
 		this.motor = motor;
-	}
-	
-	public void setStick(Joystick stick) {
 		this.stick = stick;
+		this.buttonID = buttonID;
+		this.motorVoltage = motorVoltage;
 	}
 	
 	public void ropeClimb() {
-		if (stick.getRawButton(CLIMB_BUTTON_ID)) {
-			motor.set(6);
+		if (stick.getRawButton(buttonID)) {
+			motor.set(motorVoltage);
 		} else {
 			motor.set(0);
 		}

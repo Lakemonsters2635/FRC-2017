@@ -12,15 +12,11 @@ public class Drive
 	Joystick leftJoystick;
 	Joystick rightJoystick;
 	
-	public void setMotors(CANTalon leftMotor, CANTalon rightMotor) {
-		robotDrive = new RobotDrive(leftMotor, rightMotor);
-	}
-	
-	public void setSticks(Joystick leftStick, Joystick rightStick) {
+	public void init(Joystick leftStick, Joystick rightStick, CANTalon leftMotor, CANTalon rightMotor) {
 		this.leftJoystick = leftStick;
 		this.rightJoystick = rightStick;
+		robotDrive = new RobotDrive(leftMotor, rightMotor);
 	}
-	
 	public void tankDrive() {
 		robotDrive.tankDrive(leftJoystick, rightJoystick);
 	}

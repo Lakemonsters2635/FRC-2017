@@ -6,6 +6,8 @@ import edu.wpi.first.wpilibj.Joystick;
 
 public class Shooter
 {
+	
+	public boolean isInitialized;
 	enum shootEnum {INIT, SHOOTING, RESET}
 	shootEnum shootState = shootEnum.INIT;
 	enum doorEnum {IN, CHANGING, OUT}
@@ -19,9 +21,19 @@ public class Shooter
 	public static final int FLYWHEEL_BUTTON = 0;
 	public static final int DOOR_BUTTON = 1;
 	public void shootInit(){
-		shooterVision = new ShooterVision();
-		vision = new Vision();
-		vision.camInit();
+		
+		try
+		{
+			shooterVision = new ShooterVision();
+			vision = new Vision();
+			vision.camInit();
+			shooterVision.createBox();
+			isInitialized = true;
+		}
+		catch(Exception err)
+		{
+			isInitialized = false;
+		}
 	}
 	
 	public void setFlywheel(CANTalon motor) {
@@ -81,9 +93,13 @@ public class Shooter
 	}
 	
 	public void shoot(){
-		shooterVision.createBox();
-		shooterVision.confirmBox();
-		shooterVision.viewShooter();
+		
+		if (isInitialized)
+		{
+			shooterVision.createBox();
+			shooterVision.confirmBox();
+			shooterVision.viewShooter();
+		}
 	}
 	
 	public void shootUpdate(boolean button){
