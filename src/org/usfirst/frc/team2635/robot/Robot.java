@@ -25,17 +25,17 @@ public class Robot extends IterativeRobot {
 	public static OI oi;
 	
 	//Constants
-	public static final int RIGHT_MOTOR_CHANNEL = 1;
-	public static final int RIGHT_FOLLOWER_CHANNEL = 2;
-	public static final int LEFT_MOTOR_CHANNEL = 3;
-	public static final int LEFT_FOLLOWER_CHANNEL = 4;
-	public static final int CLIMB_MOTOR_CHANNEL = 8;
-	public static final int CLIMB_FOLLOWER_CHANNEL = 9; 
+	public static final int RIGHT_MOTOR_CHANNEL = 9;
+	public static final int RIGHT_FOLLOWER_CHANNEL = 6;
+	public static final int LEFT_MOTOR_CHANNEL = 4;
+	public static final int LEFT_FOLLOWER_CHANNEL = 12;
+	public static final int CLIMB_MOTOR_CHANNEL = 0;
+	public static final int CLIMB_FOLLOWER_CHANNEL = 0; 
 	public static final float CLIMB_MOTOR_MAX_VOLTAGE = 12.0f;
-	public static final int PICKUP_MOTOR_CHANNEL = 7;
+	public static final int PICKUP_MOTOR_CHANNEL = 0;
 	public static final float PICKUP_MOTOR_MAX_VOLTAGE = 12.0f;
 	public static final int LEFT_STICK_CHANNEL = 1;
-	public static final int RIGHT_STICK_CHANNEL = 2;
+	public static final int RIGHT_STICK_CHANNEL = 0;
 
 	
 	//public RobotMotionProfile robotMotionProfile = new RobotMotionProfile(_leftMotor, _rightMotor);
@@ -52,12 +52,14 @@ public class Robot extends IterativeRobot {
     CANTalon pickupMotor;
     Joystick leftStick;
     Joystick rightStick;
-    
+    //todo:Pneumatic piston for gear delivery
+    //todo:Pneumatic piston for door
     
     //Method Object Declaration
     Shooter shooter;
     BallPickup pickup;
     RopeClimber climber;
+    Drive drive;
     
 
 
@@ -85,6 +87,7 @@ public class Robot extends IterativeRobot {
         shooter = new Shooter();
         pickup = new BallPickup();
         climber = new RopeClimber();
+        drive = new Drive();
         
         //Motor Follower Initialization
         rightFollower.changeControlMode(CANTalon.TalonControlMode.Follower);
@@ -106,6 +109,8 @@ public class Robot extends IterativeRobot {
         pickup.setStick(leftStick);
         climber.setMotor(climbMotor);
         climber.setStick(leftStick);
+        drive.setMotors(leftMotor, rightMotor);
+        drive.setSticks(leftStick, rightStick);
     }
 	
 	/**
@@ -171,6 +176,7 @@ public void teleopInit() {
         
         climber.ropeClimb();
         pickup.ballPickup();
+        drive.tankDrive();
     }
     
     /**
