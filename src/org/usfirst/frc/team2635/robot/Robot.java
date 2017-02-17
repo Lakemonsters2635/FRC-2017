@@ -2,6 +2,8 @@
 package org.usfirst.frc.team2635.robot;
 import com.ctre.CANTalon;
 
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
@@ -69,6 +71,9 @@ public class Robot extends IterativeRobot {
     BallPickup pickup;
     RopeClimber climber;
     Drive drive;
+    Compressor c;
+    DoubleSolenoid sol1;
+    DoubleSolenoid sol2;
     
     //Variable Declaration
     boolean pickupForward;
@@ -94,6 +99,9 @@ public class Robot extends IterativeRobot {
         pickupMotor = new CANTalon(PICKUP_MOTOR_CHANNEL);
         leftStick = new Joystick(LEFT_STICK_CHANNEL);
         rightStick = new Joystick(RIGHT_STICK_CHANNEL);
+        c = new Compressor(0);
+        sol1 = new DoubleSolenoid(0,1);
+        sol2 = new DoubleSolenoid(2,3);
         
         //robotMotionProfile
         
@@ -200,7 +208,20 @@ public void teleopInit() {
      */
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
-        
+        if(rightStick.getRawButton(7)){
+			sol1.set(DoubleSolenoid.Value.kForward);
+		} else if (rightStick.getRawButton(8)){
+			sol1.set(DoubleSolenoid.Value.kReverse);
+		} else {
+			sol1.set(DoubleSolenoid.Value.kOff);
+		}
+		if(rightStick.getRawButton(9)){
+			sol2.set(DoubleSolenoid.Value.kForward);
+		} else if (rightStick.getRawButton(10)){
+			sol2.set(DoubleSolenoid.Value.kReverse);
+		} else {
+			sol2.set(DoubleSolenoid.Value.kOff);
+		}
         
         for (int i=1; i < _leftBtnStates.length; i++)
         {
