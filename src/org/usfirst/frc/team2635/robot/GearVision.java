@@ -32,7 +32,7 @@ public class GearVision extends Vision {
 			SmartDashboard.putInt("rect1y",rect1.y);
 			SmartDashboard.putInt("rect2y", rect2.y);
 			//Decide which rectangle is top
-				if(rect1.x>rect2.x){
+				if(rect1.x<rect2.x){
 					leftH = rect1.height;
 					leftW = rect1.width;
 					rightH = rect2.height;
@@ -55,27 +55,53 @@ public class GearVision extends Vision {
 				//Create variables to be used for confirmation
 				
 				//Do checks on rectangle pair
-				double comp1 = leftH/rightH;
-				double comp2 = leftW/rightW;
+				double comp1;
+				if(leftH>=rightH){
+					comp1 = leftH/rightH;
+				} else {
+					comp1 = rightH/leftH;
+				}
+				double comp2;
+				if(leftW>=rightW){
+					comp2 = leftW/rightW;
+				} else {
+					comp2 = rightW/leftW;
+				}
+				
 				double comp3;
 				if(check==0){
 					double comp31 = rect1.width*4.375;
 					double comp32 = rect1.x+comp31;
 					comp3 = comp32/rect2.x;
+					SmartDashboard.putDouble("comp31", comp31);
+					SmartDashboard.putDouble("comp32", comp32);
+					SmartDashboard.putDouble("left.width", rect1.width);
+					SmartDashboard.putDouble("right.width", rect2.width);
+					SmartDashboard.putDouble("rect1.x", rect1.x);
+					SmartDashboard.putDouble("rect2.x", rect2.x);
+					
 				} else{
 					double comp31 = rect2.width*4.375;
 					double comp32 = rect2.x+comp31;
 					comp3 = comp32/rect1.x;
+					SmartDashboard.putDouble("comp31", comp31);
+				SmartDashboard.putDouble("comp32", comp32);
+				SmartDashboard.putDouble("right.width", rect1.width);
+				SmartDashboard.putDouble("left.width", rect2.width);
+				SmartDashboard.putDouble("rect2.x", rect2.x);
+				SmartDashboard.putDouble("rect1.x", rect1.x);
 				}
-				
+				double comp4;
+				comp4 = rect1.y/rect2.y;
 				//Post used variables
 				
 				//Post results of checks
 				SmartDashboard.putDouble("comp1", comp1);
 				SmartDashboard.putDouble("comp2", comp2);
-				SmartDashboard.putDouble("comp3", comp3);
 				
-				if (0.85<comp1&&comp1<1.15&&0.85<comp2&&comp2<1.15&&0.85<comp3&&comp3<1.15){
+				SmartDashboard.putDouble("comp3", comp3);
+				SmartDashboard.putDouble("comp4", comp4);
+				if (comp1==1&&comp2==1&&0.85<comp3&&comp3<1.15&&0.9<comp4&&comp4<1.1){
 					System.out.println("Target Found");
 					//Break out of for loop
 					b=10000;

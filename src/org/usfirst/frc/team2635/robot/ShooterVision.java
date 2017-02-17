@@ -109,7 +109,7 @@ public class ShooterVision extends Vision {
 	}
 	
 	public void viewShooter(){
-		//put the processed image with rectangles on smartdashboard and beware of the triangles
+		//put the processed image with rectangles on smartdashboard
 		cvSource.putFrame(source);
 	}
 	
@@ -120,6 +120,7 @@ public class ShooterVision extends Vision {
 		double parthalf = right.x-left.x;
 		parthalf = parthalf/2;
 		double half = left.x + parthalf;
+		//compare to point
 		return half;
 	}
 	
@@ -130,6 +131,7 @@ public class ShooterVision extends Vision {
 		double parthalf = bot.y-top.y;
 		parthalf = parthalf/2;
 		double half = top.y + parthalf;
+		//compare to point
 		return half;
 	}
 	
