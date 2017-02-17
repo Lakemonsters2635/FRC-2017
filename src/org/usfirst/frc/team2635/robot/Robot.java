@@ -42,6 +42,10 @@ public class Robot extends IterativeRobot {
 	public static final int PICKUP_MOTOR_CHANNEL = 9;
 	public static final float PICKUP_MOTOR_MAX_VOLTAGE = 12.0f;
 	public static final int PICKUP_CLOCKWISE_BUTTON_ID = 4;
+	
+	public static final int GEAR_LOADER_BUTTON_ID = 8;
+	public static final int SHOOTER_DOOR_BUTTON_ID = 9;
+	
 	public static final int PICKUP_COUNTER_CLOCKWISE_BUTTON_ID = 5;
 	public static final int PICKUP_MOTOR_VOLTAGE = 6;
 	
@@ -78,6 +82,9 @@ public class Robot extends IterativeRobot {
     //Variable Declaration
     boolean pickupForward;
     boolean pickupOn;
+    
+    boolean gearPneumaticExtend;
+    
 
     ButtonState [] _leftBtnStates = new ButtonState[10];
     ButtonState [] _rightBtnStates = new ButtonState[10];
@@ -208,20 +215,7 @@ public void teleopInit() {
      */
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
-        if(rightStick.getRawButton(7)){
-			sol1.set(DoubleSolenoid.Value.kForward);
-		} else if (rightStick.getRawButton(8)){
-			sol1.set(DoubleSolenoid.Value.kReverse);
-		} else {
-			sol1.set(DoubleSolenoid.Value.kOff);
-		}
-		if(rightStick.getRawButton(9)){
-			sol2.set(DoubleSolenoid.Value.kForward);
-		} else if (rightStick.getRawButton(10)){
-			sol2.set(DoubleSolenoid.Value.kReverse);
-		} else {
-			sol2.set(DoubleSolenoid.Value.kOff);
-		}
+
         
         for (int i=1; i < _leftBtnStates.length; i++)
         {
@@ -258,6 +252,37 @@ public void teleopInit() {
         	}
         }
         
+        ButtonState gearLoaderButtonState = _rightBtnStates[GEAR_LOADER_BUTTON_ID];
+		if (gearLoaderButtonState.IsReleased)
+		{
+			gearPneumaticExtend = !gearPneumaticExtend;
+			gearLoaderButtonState.IsReleased = false;
+			
+		}
+
+		        
+        
+		
+        if(gearPneumaticExtend){
+			sol1.set(DoubleSolenoid.Value.kForward);
+		} else {
+			sol1.set(DoubleSolenoid.Value.kReverse);
+		} 
+        
+        //else {
+		//	sol1.set(DoubleSolenoid.Value.kOff);
+		//}
+        
+        
+        
+        
+		if(rightStick.getRawButton(9)){
+			sol2.set(DoubleSolenoid.Value.kForward);
+		} else if (rightStick.getRawButton(10)){
+			sol2.set(DoubleSolenoid.Value.kReverse);
+		} else {
+			sol2.set(DoubleSolenoid.Value.kOff);
+		}
         
         
         
