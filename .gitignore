@@ -49,3 +49,7 @@ Temporary Items
 
 *.class
 /bin/
+build/jars/navx_frc.jar
+dist/FRCUserProgram.jar
+dist/FRCUserProgram.jar
+*.jar

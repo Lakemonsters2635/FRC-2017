@@ -101,11 +101,11 @@ public class GearVision extends Vision {
 				
 				SmartDashboard.putDouble("comp3", comp3);
 				SmartDashboard.putDouble("comp4", comp4);
-				if (comp1==1&&comp2==1&&0.85<comp3&&comp3<1.15&&0.9<comp4&&comp4<1.1){
+				if (comp1==1&&comp2==1&&0.85<comp3&&comp3<1.15&&0.9<comp4&&comp4<1.1&&rect1.width>20){
 					System.out.println("Target Found");
 					//Break out of for loop
-					b=10000;
-					j=10000;
+					b=boundRect.size()+100000;
+					j=boundRect.size()+100000;
 					//Draw confirmed rectangles
 					Imgproc.rectangle( source, rect2.tl(), rect2.br(), new Scalar(0,0,255), 2, 8, 0 );
 					Imgproc.rectangle( source, rect1.tl(), rect1.br(), new Scalar(0,0,255), 2, 8, 0 );

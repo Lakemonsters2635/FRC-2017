@@ -63,11 +63,11 @@ public class ShooterVision extends Vision {
 				SmartDashboard.putDouble("comp1", comp1);
 				SmartDashboard.putDouble("comp2", comp2);
 				SmartDashboard.putDouble("comp3", comp3);
-				if (0.85<comp1&&comp1<1.15&&0.85<comp2&&comp2<1.15&&0.85<comp3&&comp3<1.15){
+				if (0.85<comp1&&comp1<1.15&&0.85<comp2&&comp2<1.15&&0.85<comp3&&comp3<1.15&&rect1.width>30){
 					System.out.println("Target Found");
 					//Break out of for loop
-					b=10000;
-					j=10000;
+					b=boundRect.size()+100000;
+					j=boundRect.size()+100000;
 					//Draw confirmed rectangles
 					Imgproc.rectangle( source, rect2.tl(), rect2.br(), new Scalar(0,0,255), 2, 8, 0 );
 					Imgproc.rectangle( source, rect1.tl(), rect1.br(), new Scalar(0,0,255), 2, 8, 0 );

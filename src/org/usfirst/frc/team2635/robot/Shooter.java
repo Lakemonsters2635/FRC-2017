@@ -42,7 +42,7 @@ public class Shooter
 	
 	public void setDoor(CANTalon motor){
 		this.door = motor;
-		//Change door to whatever is used to control poomatics
+		//Change door to whatever is used to control pneumatics
 	}
 	
 	public void setStick(Joystick stick) {
@@ -59,7 +59,7 @@ public class Shooter
 	}
 	
 	public void door(Boolean button){
-		//Change door to whatever is used to control pneuumatics
+		//Change door to whatever is used to control pneumatics
 		switch(doorState){
 		case IN:
 			prevmode = 0;
@@ -77,7 +77,7 @@ public class Shooter
 				doorState = doorEnum.IN;
 			} 
 			else {
-				//Well sh*te I didn't think this would happen
+				//Welp, I didn't think this would happen
 			}
 			//NOTES: If there is a switch like at bunny bots we will need to use that
 			break;
@@ -127,4 +127,3 @@ public class Shooter
 	}
 	//NOTE: Change shoot() to a state, like shoot in bunnybots, as to make capable of firing separate balls and better control
 }
-//bag and tag? more like... snag and gulag. I'll show myself out
