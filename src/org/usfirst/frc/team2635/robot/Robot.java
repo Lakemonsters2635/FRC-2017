@@ -4,6 +4,7 @@ import com.ctre.CANTalon;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
@@ -72,10 +73,10 @@ public class Robot extends IterativeRobot {
     //Variable Declaration
     boolean pickupForward;
     boolean pickupOn;
-    
-    boolean [] _leftBtnsLast = {false,false,false,false,false,false,false,false,false,false};
-    boolean [] _rightBtnsLast = {false,false,false,false,false,false,false,false,false,false};
 
+    ButtonState [] _leftBtnStates = new ButtonState[10];
+    ButtonState [] _rightBtnStates = new ButtonState[10];
+    
     public void robotInit() {
 		oi = new OI();
         chooser = new SendableChooser();
@@ -126,6 +127,18 @@ public class Robot extends IterativeRobot {
         pickup.init(pickupMotor, leftStick, PICKUP_CLOCKWISE_BUTTON_ID, PICKUP_COUNTER_CLOCKWISE_BUTTON_ID, PICKUP_MOTOR_VOLTAGE);
         climber.init(climbMotor, leftStick, CLIMB_BUTTON_ID, CLIMB_MOTOR_VOLTAGE);
         drive.init(leftStick, rightStick, leftMotor, rightMotor);
+        
+        for (int i=1; i < _leftBtnStates.length; i++)
+        {
+        	ButtonState leftState = new ButtonState();
+        	leftState.buttonId = i;
+        	_leftBtnStates[i]  = leftState;
+        	
+        	ButtonState rightState = new ButtonState();
+        	rightState.buttonId = i;
+        	_rightBtnStates[i]  = leftState;
+        	
+        }
     }
 	
 	/**
@@ -188,38 +201,70 @@ public void teleopInit() {
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
         
-		boolean [] leftBtns= new boolean [_leftBtnsLast.length];
-		for(int i=1;i<_leftBtnsLast.length;++i)
-			leftBtns[i] = leftStick.getRawButton(i);
-
-		boolean [] rightBtns= new boolean [_rightBtnsLast.length];
-		for(int i=1;i<_rightBtnsLast.length;++i)
-			rightBtns[i] = rightStick.getRawButton(i);		
-		
-		if(leftBtns[PICKUP_CLOCKWISE_BUTTON_ID] && !_leftBtnsLast[PICKUP_CLOCKWISE_BUTTON_ID]) {
-			pickupOn = true;
+        
+        for (int i=1; i < _leftBtnStates.length; i++)
+        {
+        	if (!_leftBtnStates[i].IsPressed)
+        	{
+        		_leftBtnStates[i].IsPressed = leftStick.getRawButton(i);
+        	}
+        	else
+        	{
+        		boolean currentlyPressed = leftStick.getRawButton(i);
+        		if (!currentlyPressed)
+        		{
+        			_leftBtnStates[i].IsReleased = true;
+        			_leftBtnStates[i].IsPressed = false;
+        		}
+        	}
+        }
+        
+        
+        for (int i=1; i < _rightBtnStates.length; i++)
+        {
+        	if (!_rightBtnStates[i].IsPressed)
+        	{
+        		_rightBtnStates[i].IsPressed = rightStick.getRawButton(i);
+        	}
+        	else
+        	{
+        		boolean currentlyPressed = rightStick.getRawButton(i);
+        		if (!currentlyPressed)
+        		{
+        			_rightBtnStates[i].IsReleased = true;
+        			_rightBtnStates[i].IsPressed = false;
+        		}
+        	}
+        }
+        
+        
+        
+        
+		ButtonState pickupButtonState = _leftBtnStates[PICKUP_CLOCKWISE_BUTTON_ID];
+		if (pickupButtonState.IsReleased)
+		{
+			pickupOn = !pickupOn;
 			pickupForward = true;
-		} 
-		else if(!leftBtns[PICKUP_CLOCKWISE_BUTTON_ID] && _leftBtnsLast[PICKUP_CLOCKWISE_BUTTON_ID]) {
-			pickupOn = false;
-			pickupForward = true;
+			pickupButtonState.IsReleased = false;
+			
 		}
-		//else if()
+		
+		pickupButtonState = _leftBtnStates[PICKUP_COUNTER_CLOCKWISE_BUTTON_ID];
+		if (pickupButtonState.IsReleased)
+		{
+			pickupOn = !pickupOn;
+			pickupForward = false;
+			pickupButtonState.IsReleased = false;
+			
+		}
+
         shooter.shoot();
 
         pickup.ballPickup(pickupOn, pickupForward);
         climber.ropeClimb();
 
         drive.tankDrive();
-        
-        
-        
-        
-        
-		for(int i=1;i<_leftBtnsLast.length;++i)
-			_leftBtnsLast[i] = leftBtns[i];
-		for(int i=1;i<_rightBtnsLast.length;++i)
-			_rightBtnsLast[i] = rightBtns[i];
+
     }
     
     /**
