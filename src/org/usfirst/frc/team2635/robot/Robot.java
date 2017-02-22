@@ -75,9 +75,9 @@ public class Robot extends IterativeRobot {
     BallPickup pickup;
     RopeClimber climber;
     Drive drive;
+    Vision vision;
     Compressor c;
     DoubleSolenoid sol1;
-    DoubleSolenoid sol2;
     
     //Variable Declaration
     boolean pickupForward;
@@ -108,7 +108,8 @@ public class Robot extends IterativeRobot {
         rightStick = new Joystick(RIGHT_STICK_CHANNEL);
         c = new Compressor(0);
         sol1 = new DoubleSolenoid(0,1);
-        sol2 = new DoubleSolenoid(2,3);
+       
+        vision = new Vision();
         
         //robotMotionProfile
         
@@ -142,6 +143,7 @@ public class Robot extends IterativeRobot {
         pickup.init(pickupMotor, leftStick, PICKUP_CLOCKWISE_BUTTON_ID, PICKUP_COUNTER_CLOCKWISE_BUTTON_ID, PICKUP_MOTOR_VOLTAGE);
         climber.init(climbMotor, leftStick, CLIMB_BUTTON_ID, CLIMB_MOTOR_VOLTAGE);
         drive.init(leftStick, rightStick, leftMotor, rightMotor);
+        vision.camInit();
         
         for (int i=1; i < _leftBtnStates.length; i++)
         {
@@ -273,19 +275,7 @@ public void teleopInit() {
 		//	sol1.set(DoubleSolenoid.Value.kOff);
 		//}
         
-        
-        
-        
-		if(rightStick.getRawButton(9)){
-			sol2.set(DoubleSolenoid.Value.kForward);
-		} else if (rightStick.getRawButton(10)){
-			sol2.set(DoubleSolenoid.Value.kReverse);
-		} else {
-			sol2.set(DoubleSolenoid.Value.kOff);
-		}
-        
-        
-        
+
 		ButtonState pickupButtonState = _leftBtnStates[PICKUP_CLOCKWISE_BUTTON_ID];
 		if (pickupButtonState.IsReleased)
 		{

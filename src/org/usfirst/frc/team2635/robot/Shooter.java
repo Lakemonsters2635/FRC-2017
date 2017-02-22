@@ -2,6 +2,7 @@ package org.usfirst.frc.team2635.robot;
 
 import com.ctre.CANTalon;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Joystick;
 
 public class Shooter
@@ -18,10 +19,11 @@ public class Shooter
 	CANTalon flywheel;
 	CANTalon door;
 	Joystick stick;
+	DoubleSolenoid sol2;
 	public static final int FLYWHEEL_BUTTON = 0;
 	public static final int DOOR_BUTTON = 1;
-	public void shootInit(){
-		
+	public void shootInit(){									
+
 		try
 		{
 			shooterVision = new ShooterVision();
@@ -29,6 +31,7 @@ public class Shooter
 			vision.camInit();
 			shooterVision.createBox();
 			isInitialized = true;
+			sol2 = new DoubleSolenoid(2,3);
 		}
 		catch(Exception err)
 		{
@@ -37,16 +40,16 @@ public class Shooter
 	}
 	
 	public void setFlywheel(CANTalon motor) { 
-		this.flywheel = motor;
+		flywheel = motor;
 	}
 	
 	public void setDoor(CANTalon motor){
-		this.door = motor;
+		door = motor;
 		//Change door to whatever is used to control pneumatics
 	}
 	
-	public void setStick(Joystick stick) {
-		this.stick = stick;
+	public void setStick(Joystick givenStick) {
+		stick = givenStick;
 	}
 	
 	public void flywheel(){
@@ -69,17 +72,19 @@ public class Shooter
 			
 		case CHANGING:
 			if (prevmode == 0){
-				//push door out
+				sol2.set(DoubleSolenoid.Value.kForward);
+				prevmode = 2;
 				doorState = doorEnum.OUT;
 			}
 			else if (prevmode == 1){
-				//pull door in
+				sol2.set(DoubleSolenoid.Value.kReverse);
+				prevmode = 2;
 				doorState = doorEnum.IN;
+				
 			} 
 			else {
-				//Welp, I didn't think this would happen
+				sol2.set(DoubleSolenoid.Value.kOff);
 			}
-			//NOTES: If there is a switch like at bunny bots we will need to use that
 			break;
 			
 		case OUT:
